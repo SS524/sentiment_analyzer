@@ -1,0 +1,106 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/sentimentAnalysis/pipeline/stage_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 68158c32dfd28ebf190f92cecaeb9306
+      size: 691
+    - path: src/sentimentAnalysis/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: 303a3e93f87394da28a0b7c855233665
+      size: 886
+    outs:
+    - path: artifacts/data_ingestion/data.csv
+      hash: md5
+      md5: 325be553cb5850b6e67a01e716c3b3e8
+      size: 66262310
+  data_processing:
+    cmd: python src/sentimentAnalysis/pipeline/stage_02_data_processing.py
+    deps:
+    - path: artifacts/data_ingestion/data.csv
+      hash: md5
+      md5: 325be553cb5850b6e67a01e716c3b3e8
+      size: 66262310
+    - path: config/config.yaml
+      hash: md5
+      md5: 68158c32dfd28ebf190f92cecaeb9306
+      size: 691
+    - path: src/sentimentAnalysis/pipeline/stage_02_data_processing.py
+      hash: md5
+      md5: ad65925bdd1db46a1ba6a3677c3b75da
+      size: 1025
+    outs:
+    - path: artifacts/data_processing/final_data_for_model_building.pkl
+      hash: md5
+      md5: 7928614267a5180f0f165c4e55d44500
+      size: 39864179
+    - path: artifacts/data_processing/word2vec.pkl
+      hash: md5
+      md5: 16cbe6dc980a0ee6fc8e2cd4329c186e
+      size: 51547261
+  model_building:
+    cmd: python src/sentimentAnalysis/pipeline/stage_03_model_building.py
+    deps:
+    - path: artifacts/data_processing/final_data_for_model_building.pkl
+      hash: md5
+      md5: 7928614267a5180f0f165c4e55d44500
+      size: 39864179
+    - path: artifacts/data_processing/word2vec.pkl
+      hash: md5
+      md5: 16cbe6dc980a0ee6fc8e2cd4329c186e
+      size: 51547261
+    - path: config/config.yaml
+      hash: md5
+      md5: 68158c32dfd28ebf190f92cecaeb9306
+      size: 691
+    - path: src/sentimentAnalysis/pipeline/stage_03_model_building.py
+      hash: md5
+      md5: 158f2d38e56829ce5fc947298b90c49f
+      size: 967
+    params:
+      params.yaml:
+        EPOCHS: 7
+        LEARNING_RATE: 0.001
+        METRICS: accuracy
+        NUMBER_OF_NEURONS_IN_FIRST_LAYER: 128
+        NUMBER_OF_NEURONS_IN_OUTPUT_LAYER: 1
+        NUMBER_OF_NEURONS_IN_SECOND_LAYER: 256
+    outs:
+    - path: artifacts/model_building/base_model.pkl
+      hash: md5
+      md5: 97b7a7d9d603f49e036d599dae6ac948
+      size: 2068083
+    - path: artifacts/model_building/test_data.pkl
+      hash: md5
+      md5: 70f621c0d4c2f2304331f8611484004f
+      size: 7973524
+    - path: artifacts/model_building/trained_model.pkl
+      hash: md5
+      md5: 01d0a042b82ffe09918fd2d06fe2d2b4
+      size: 6172787
+  model_evaluation:
+    cmd: python src/sentimentAnalysis/pipeline/stage_04_model_evaluation.py
+    deps:
+    - path: artifacts/model_building/test_data.pkl
+      hash: md5
+      md5: 70f621c0d4c2f2304331f8611484004f
+      size: 7973524
+    - path: artifacts/model_building/trained_model.pkl
+      hash: md5
+      md5: 01d0a042b82ffe09918fd2d06fe2d2b4
+      size: 6172787
+    - path: config/config.yaml
+      hash: md5
+      md5: 68158c32dfd28ebf190f92cecaeb9306
+      size: 691
+    - path: src/sentimentAnalysis/pipeline/stage_04_model_evaluation.py
+      hash: md5
+      md5: 399bb7df180c6a8e462d4d6727a1bdc8
+      size: 944
+    outs:
+    - path: scores.json
+      hash: md5
+      md5: ab49a2ce26e20b73565189ad3a651bc8
+      size: 73

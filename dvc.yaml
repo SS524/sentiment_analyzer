@@ -1,0 +1,54 @@
+stages:
+  data_ingestion:
+    cmd: python src/sentimentAnalysis/pipeline/stage_01_data_ingestion.py
+    deps:
+      - src/sentimentAnalysis/pipeline/stage_01_data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion/data.csv
+
+
+  data_processing:
+    cmd: python src/sentimentAnalysis/pipeline/stage_02_data_processing.py
+    deps:
+      - src/sentimentAnalysis/pipeline/stage_02_data_processing.py
+      - config/config.yaml
+      - artifacts/data_ingestion/data.csv
+    outs:
+      - artifacts/data_processing/final_data_for_model_building.pkl
+      - artifacts/data_processing/word2vec.pkl
+
+
+
+  model_building:
+    cmd: python src/sentimentAnalysis/pipeline/stage_03_model_building.py
+    deps:
+      - src/sentimentAnalysis/pipeline/stage_03_model_building.py
+      - config/config.yaml
+      - artifacts/data_processing/final_data_for_model_building.pkl
+      - artifacts/data_processing/word2vec.pkl
+    params:
+      - NUMBER_OF_NEURONS_IN_FIRST_LAYER
+      - NUMBER_OF_NEURONS_IN_SECOND_LAYER
+      - NUMBER_OF_NEURONS_IN_OUTPUT_LAYER
+      - METRICS
+      - LEARNING_RATE
+      - EPOCHS
+    outs:
+      - artifacts/model_building/base_model.pkl
+      - artifacts/model_building/test_data.pkl
+      - artifacts/model_building/trained_model.pkl
+
+
+  
+
+  model_evaluation:
+    cmd: python src/sentimentAnalysis/pipeline/stage_04_model_evaluation.py
+    deps:
+      - src/sentimentAnalysis/pipeline/stage_04_model_evaluation.py
+      - config/config.yaml
+      - artifacts/model_building/test_data.pkl
+      - artifacts/model_building/trained_model.pkl
+    metrics:
+    - scores.json:
+        cache: false

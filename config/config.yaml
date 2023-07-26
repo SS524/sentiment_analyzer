@@ -1,0 +1,23 @@
+artifacts_root: artifacts
+
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_URL: https://drive.google.com/file/d/1SGkwejP-IDJRK0r-1bgwUta1m2jvQRgS/view?usp=drive_link
+  local_data_file: artifacts/data_ingestion/data.csv
+
+
+data_processing:
+  root_dir: artifacts/data_processing
+  word2vec_modl_file: artifacts/data_processing/word2vec.pkl
+  final_data_file: artifacts/data_processing/final_data_for_model_building.pkl
+
+
+model_building:
+  root_dir: artifacts/model_building
+  base_modl_file: artifacts/model_building/base_model.pkl
+  trained_modl_file: artifacts/model_building/trained_model.pkl
+  test_data_file: artifacts/model_building/test_data.pkl
+
+
+  
