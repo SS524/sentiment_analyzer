@@ -2,6 +2,7 @@ from src.sentimentAnalysis.utils.common_functionality import load_object,save_js
 from src.sentimentAnalysis import logger
 from src.sentimentAnalysis.entity.config_entity import ModelEvaluationConfig
 from pathlib import Path
+from tensorflow.keras.models import load_model as tfk__load_model
 
 
 class ModelEvaluation:
@@ -12,7 +13,8 @@ class ModelEvaluation:
     
     def evaluate(self, model_path, test_data_path):
         
-        trained_model = load_object(model_path)
+        #trained_model = load_object(model_path)
+        trained_model = tfk__load_model(model_path)
         test_data = load_object(test_data_path)
         X_test = test_data['X_test']
         y_test = test_data['y_test']

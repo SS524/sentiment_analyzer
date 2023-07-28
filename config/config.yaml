@@ -15,8 +15,8 @@ data_processing:
 
 model_building:
   root_dir: artifacts/model_building
-  base_modl_file: artifacts/model_building/base_model.pkl
-  trained_modl_file: artifacts/model_building/trained_model.pkl
+  base_modl_file: artifacts/model_building/base_model.h5
+  trained_modl_file: artifacts/model_building/model.h5
   test_data_file: artifacts/model_building/test_data.pkl
 
 

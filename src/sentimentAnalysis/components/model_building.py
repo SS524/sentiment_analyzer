@@ -7,6 +7,7 @@ from src.sentimentAnalysis.utils.common_functionality import load_object, save_o
 from src.sentimentAnalysis import logger
 from src.sentimentAnalysis.entity.config_entity import ModelBuildingConfig
 import os
+from tensorflow.keras.models import load_model as tfk__load_model
 
 
 
@@ -33,7 +34,8 @@ class ModelBuilding:
             model.compile(loss=loss,optimizer=opt,metrics=metrices)
             logger.info("Model comiplation is done")
 
-            save_object(self.config.base_modl_file,model)
+            #save_object(self.config.base_modl_file,model)
+            model.save(self.config.base_modl_file)
             logger.info("Base model is saved")
 
 
@@ -55,12 +57,14 @@ class ModelBuilding:
 
             X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
 
-            base_model = load_object(self.config.base_modl_file)
+            #base_model = load_object(self.config.base_modl_file)
+            base_model = tfk__load_model(self.config.base_modl_file)
 
             base_model.fit(x=X_train,y=y_train,epochs=self.config.epochs)
             logger.info("Model training completed")
 
-            save_object(self.config.trained_modl_file, base_model)
+            #save_object(self.config.trained_modl_file, base_model)
+            base_model.save(self.config.trained_modl_file)
             logger.info("trained model is saved")
 
             test_data = {
